@@ -1,4 +1,5 @@
 const { getUUID } = require("./plugins");
+const buildProduct = require("./factories/factory")
 
 class ProductManager {
 
@@ -64,24 +65,29 @@ class ProductManager {
 
 
 const productManager = new ProductManager();
+
+
+const product = buildProduct({getUUID});
+
+
 console.log("1. ", productManager.getProducts());
 
-const product1 = {
-    id: getUUID(),
+const product1 = product({
     title: "Mermelada",
-    price: "652",
-    thumbnail: "Sin imagen",
-    code: "MER123",
+    code:"MER123",
+    price: 750,
     stock: 15,
-};
-const product2 = {
-    id: getUUID(),
+});
+
+const product2 = product({
     title: "Fideo Marolio",
     price: "652",
     thumbnail: "https://http2.mlstatic.com/D_NQ_NP_638506-MLA48521707549_122021-O.webp",
     code: "ATR999",
     stock: 7,
-};
+});
+
+
 const product3 = {
     id: getUUID(),
     // title: "Dulce de Leche",
