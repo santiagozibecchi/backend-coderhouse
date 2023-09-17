@@ -1,0 +1,16 @@
+{
+  "name": "clases",
+  "version": "0.0.1",
+  "description": "Desasfia CoderHouse - EcmaScript ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js"
+  },
+  "author": "Santiago Zibecchi",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.0.1",
+    "uuid": "^9.0.1"
+  }
+}
