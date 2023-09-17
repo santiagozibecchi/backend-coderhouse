@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { getUUID } = require("./plugins");
 
 class ProductManager {
 
@@ -67,7 +67,7 @@ const productManager = new ProductManager();
 console.log("1. ", productManager.getProducts());
 
 const product1 = {
-    id: uuidv4(),
+    id: getUUID(),
     title: "Mermelada",
     price: "652",
     thumbnail: "Sin imagen",
@@ -75,7 +75,7 @@ const product1 = {
     stock: 15,
 };
 const product2 = {
-    id: uuidv4(),
+    id: getUUID(),
     title: "Fideo Marolio",
     price: "652",
     thumbnail: "https://http2.mlstatic.com/D_NQ_NP_638506-MLA48521707549_122021-O.webp",
@@ -83,7 +83,7 @@ const product2 = {
     stock: 7,
 };
 const product3 = {
-    id: uuidv4(),
+    id: getUUID(),
     // title: "Dulce de Leche",
     // price: "652",
     code: "DUL258",
