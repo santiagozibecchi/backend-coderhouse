@@ -108,6 +108,22 @@ class ProductManager {
         return product;
     };
 
+    getProductInfo() {
+        const totalPrice = { products: [], totalPriceProduct: 0, totalStock: 0 };
+      
+        this.#products.forEach((currentValue) => {
+          const productInfo = {
+            title: currentValue.title,
+            price: currentValue.price,
+          };
+      
+          totalPrice.products.push(productInfo);
+          totalPrice.totalPriceProduct += productInfo.price;
+          totalPrice.totalStock += currentValue.stock;
+        });
+      
+        return totalPrice;
+    };
 };
 
 
@@ -115,11 +131,11 @@ const productManager = new ProductManager();
 
 const product = buildProduct({getUUID});
 const product1 = product({ title: "Mermelada", code:"MER123", price: 750, stock: 15 });
-const product2 = product({ title: "Fideo Marolio", price: "652", thumbnail: "https://http2.mlstatic.com/D_NQ_NP_638506-MLA48521707549_122021-O.webp", code: "ATR999", stock: 2 });
-const product3 = product({ title: "Dulce de Leche", price: "652", code: "ATR999", stock: 10 });
-const product4 = product({ title: "Arroz", price: "355", code: "ATR999", stock: 70 });
-const product5 = product({ title: "Proteina", price: "4599", code: "ATR999", stock: 8 });
-const product6 = product({ title: "Sopa", price: "700", code: "ATR999", stock: 3 });
+const product2 = product({ title: "Fideo Marolio", price: 652, thumbnail: "https://http2.mlstatic.com/D_NQ_NP_638506-MLA48521707549_122021-O.webp", code: "ATR999", stock: 2 });
+const product3 = product({ title: "Dulce de Leche", price: 652, code: "ATR999", stock: 10 });
+const product4 = product({ title: "Arroz", price: 355, code: "ATR999", stock: 70 });
+const product5 = product({ title: "Proteina", price: 4599, code: "ATR999", stock: 8 });
+const product6 = product({ title: "Sopa", price: 700, code: "ATR999", stock: 3 });
 
 
 productManager.addProduct(product1);
@@ -139,6 +155,9 @@ console.log(productManager.modifyProductById(product1.id, {title: "Mermelada de 
 
 // Obtengo todos los productos nuevamente!
 console.log("Obtengo todos los productos nuevamente!", productManager.getProducts());
+
+// Obtener el precio total de los productos por cantidad de stock:
+console.log(productManager.getProductInfo());
 
 
 
