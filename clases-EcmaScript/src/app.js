@@ -7,20 +7,15 @@ class ProductManager {
     constructor(){};
 
     getProducts(){
-        
-        if (this.#products.length === 0) {
-            return [];
-        };
-
-        return this.#products;
+        return [...this.#products];
     };
 
     addProduct(product){
 
-        const isSameId = this.#checkValidId(product)
-        const hasField = this.#checkRequireFields(product);
+        const isProductAlredyExist = this.#checkIfProductExist(product.id);
+        const hasRequiereFields = this.#checkRequireFields(product);
 
-        if (isSameId || !hasField) {
+        if (isProductAlredyExist || !hasRequiereFields) {
             return;
         };
 
@@ -46,16 +41,17 @@ class ProductManager {
         return fulfillsCondition;
     };
 
-    #checkValidId(product){
-        return this.#products.find( prod => prod.id === product.id);
-    }
+    #checkIfProductExist(id){
+        console.log("Ya existe el producto con el ID: ", id);
+        return this.#products.find( prod => prod.id === id);
+    };
 
-    getProductById(prod){
+    getProductById(id){
 
-        const product = this.#products.find(product => product.id === prod.id); 
+        const product = this.#products.find(product => product.id === id); 
 
         if (!product){
-            return {status: false, message: `No se encontró el producto con el id ${prod.id}`}
+            return {status: false, message: `No se encontró el producto con el id ${id}`}
         };
 
         return product;
@@ -82,6 +78,15 @@ const product2 = {
     code: "ATR999",
     stock: 7,
 };
+
+const product4 = {
+    id: uuidv4(),
+    title: "YERBA",
+    price: "1800",
+    thumbnail: "https://http2.mlstatic.com/D_NQ_NP_638506-MLA48521707549_122021-O.webp",
+    code: "YER999",
+    stock: 7,
+};
 const product3 = {
     id: uuidv4(),
     // title: "Dulce de Leche",
@@ -105,7 +110,7 @@ console.log("4. ", productManager.getProducts());
 productManager.addProduct(product3);
 console.log("5. ", productManager.getProducts());
 
-console.log("Obtener producto por ID: ", productManager.getProductById(product1));
+console.log("Obtener producto por ID: ", productManager.getProductById(product1.id));
 
 const productWithInvalidId = {
     id: 3333,
@@ -115,7 +120,15 @@ const productWithInvalidId = {
     stock: 3,
 };
 
-console.log("Obtener producto por ID: ", productManager.getProductById(productWithInvalidId).message);
+console.log("Obtener producto por ID: ", productManager.getProductById(productWithInvalidId.id));
+
+// Intentar modificar el arreglo de productos desde afuera, (Ahora no se puede porque estoy devolviendo una nueva referencia);
+// productManager.getProducts().length = 0;
+console.log(productManager.getProducts());
+
+productManager.addProduct(product4).length = 0;
+console.log("Agrego un nuevo producto", productManager.addProduct(product4));
+console.log(productManager.getProducts());
 
 
 
