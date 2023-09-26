@@ -1,18 +1,26 @@
-const { v4: uuidv4 } = require('uuid');
+const fs = require("fs");  
 
 class ProductManager {
 
-    #products = [];
 
-    constructor(){};
-
-    getProducts(){
-        return [...this.#products];
+    constructor(path){
+        this.path = path;
     };
 
-    addProduct(product){
+     getProducts(){
 
-        const isProductAlredyExist = this.#checkIfProductExist(product.id);
+        const products =  getAllProductsInFileSystem(this.path);
+
+        if (products.length === 0){
+            return "No hay productos guardados."
+        }
+
+        return products;
+    };
+
+     addProduct(product){
+
+        const isProductAlredyExist =  this.#checkIfProductExist(product.id);
         const hasRequiereFields = this.#checkRequireFields(product);
 
         if (isProductAlredyExist || !hasRequiereFields) {
@@ -23,11 +31,56 @@ class ProductManager {
             product.thumbnail = "Sin imagen";
         };
 
-        return this.#products.push(product);
+        let allProducts = getAllProductsInFileSystem(this.path);
+
+        product.id = allProducts.length**2;
+
+        allProducts.push(product);
+        saveProductToFileSystem(this.path, allProducts);
     };
 
+     getProductById(id){
+        const products = getAllProductsInFileSystem(this.path);
+        const product = products.find(product => product.id === id); 
+
+        if (!product){
+            return {status: false, message: `No se encontró el producto con el id ${id}`}
+        };
+
+        return product;
+    };
+
+     updateProduct(product){
+        const existingProduct =  this.getProductById(product.id);
+
+        if(!existingProduct) {
+            console.log(`No existe el producto con el ID: ${product.id}`);
+            return;
+        };
+
+        const updatedProducts =  this.deleteProduct(product.id);
+        updatedProducts.push(product);
+
+        saveProductToFileSystem(this.path, updatedProducts);
+    };
+
+     deleteProduct(id){
+        const products =  getAllProductsInFileSystem(this.path);
+        const updatedAllProducts = products.filter( p => p.id !== id);
+
+        try {
+            saveProductToFileSystem(this.path, updatedAllProducts);
+        } catch (error) {
+        throw new Error(`Error al guardar los productos en el archivo.`);
+        }
+
+        return updatedAllProducts;
+    };
+
+
+
     #checkRequireFields(product){
-        const requireFields = ["title", "price", "code", "stock", "id"];
+        const requireFields = ["title", "price", "code", "stock"];
         const productField = Object.keys(product);
         let fulfillsCondition = true;
 
@@ -41,95 +94,80 @@ class ProductManager {
         return fulfillsCondition;
     };
 
-    #checkIfProductExist(id){
-        console.log("Ya existe el producto con el ID: ", id);
-        return this.#products.find( prod => prod.id === id);
-    };
+     #checkIfProductExist(id){
+        const allProducts =  getAllProductsInFileSystem(this.path);
+        const isProductInFileSystem = allProducts.find( prod => prod.id === id);
 
-    getProductById(id){
-
-        const product = this.#products.find(product => product.id === id); 
-
-        if (!product){
-            return {status: false, message: `No se encontró el producto con el id ${id}`}
+        if (isProductInFileSystem) {
+            console.log("Ya existe el producto con el ID: ", id);
         };
 
-        return product;
+        return isProductInFileSystem;
+    };
+
+
+};
+
+
+// Utilidades
+const saveProductToFileSystem =  (path, data) => {
+    const content = JSON.stringify(data, null, "\t");
+    console.log(content);
+    try {
+         fs.writeFileSync(path, content, "utf-8");
+    } catch (error) {
+        throw new Error(`El archivo ${path} no tiene un formato valido`);
     };
 };
 
+const getAllProductsInFileSystem = (path) => {
 
-const productManager = new ProductManager();
-console.log("1. ", productManager.getProducts());
+    try {
+        // Para verificar si un archivo o directorio existe o si tienes permiso para acceder a él.
+         fs.accessSync(path);
+    } catch (error) {
+        return [];
+    };
+    
+    
+    try {
+        const content =  fs.readFileSync(path);
+        return JSON.parse(content);
+    } catch (error) {
+        throw new Error(`El archivo ${path} no tiene un formato valido`);
+    };
+};
 
 const product1 = {
-    id: uuidv4(),
-    title: "Mermelada",
-    price: "652",
+    title: "Bombilla para el mate",
+    price: "10800",
     thumbnail: "Sin imagen",
-    code: "MER123",
-    stock: 15,
-};
-const product2 = {
-    id: uuidv4(),
-    title: "Fideo Marolio",
-    price: "652",
-    thumbnail: "https://http2.mlstatic.com/D_NQ_NP_638506-MLA48521707549_122021-O.webp",
-    code: "ATR999",
-    stock: 7,
-};
-
-const product4 = {
-    id: uuidv4(),
-    title: "YERBA",
-    price: "1800",
-    thumbnail: "https://http2.mlstatic.com/D_NQ_NP_638506-MLA48521707549_122021-O.webp",
-    code: "YER999",
-    stock: 7,
-};
-const product3 = {
-    id: uuidv4(),
-    // title: "Dulce de Leche",
-    // price: "652",
-    code: "DUL258",
-    stock: 3,
+    code: "BOM123",
+    stock: 22,
 };
 
 
-productManager.addProduct(product1);
-console.log("2. ", productManager.getProducts());
-
-// No agrega un producto que ya se encuentre con el mismo ID:
-productManager.addProduct(product1);
-console.log("3. ", productManager.getProducts());
-
-productManager.addProduct(product2);
-console.log("4. ", productManager.getProducts());
-
-// Agregar un producto sin un campo requerido
-productManager.addProduct(product3);
-console.log("5. ", productManager.getProducts());
-
-console.log("Obtener producto por ID: ", productManager.getProductById(product1.id));
-
-const productWithInvalidId = {
-    id: 3333,
-    title: "Dulce de Leche",
-    price: "652",
-    code: "ASD234",
-    stock: 3,
+const executeCode1 =  () => {
+    const productManager = new ProductManager("./src/products/products.json");
+    productManager.addProduct(product1);
 };
 
-console.log("Obtener producto por ID: ", productManager.getProductById(productWithInvalidId.id));
+const executeCode2 =  () => {
+    const productManager = new ProductManager("./src/products/products.json");
+    productManager.deleteProduct(1);
+};
 
-// Intentar modificar el arreglo de productos desde afuera, (Ahora no se puede porque estoy devolviendo una nueva referencia);
-// productManager.getProducts().length = 0;
-console.log(productManager.getProducts());
+const executeCode3 =  () => {
+    const productManager = new ProductManager("./src/products/products.json");  
+    productManager.updateProduct({
+        "id": 36,
+		"title": "Yerba mate Bartolo",
+		"price": "250000",
+		"code": "MAT123",
+		"stock": 14
+	});
+};
 
-productManager.addProduct(product4).length = 0;
-console.log("Agrego un nuevo producto", productManager.addProduct(product4));
-console.log(productManager.getProducts());
-
-
-
-
+// executeCode1();
+// executeCode2();
+// executeCode3();
