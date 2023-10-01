@@ -1,6 +1,16 @@
 const fs = require("fs");  
+const express = require('express');
 
+const port = 7070;
+const app = express();
 
+app.listen(port, () => {
+    console.log(`App listen on port ${port}`);
+})
+
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+})
 
 
 class ProductManager {
@@ -167,4 +177,4 @@ const executeCode1 =  () => {
 
 };
 
-executeCode1();
+// executeCode1();
