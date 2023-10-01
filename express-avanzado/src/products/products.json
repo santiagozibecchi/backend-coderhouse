@@ -1,56 +1,82 @@
 [
 	{
-		"id": 3,
+		"id": 1,
 		"title": "Yerba mate",
 		"price": "1800",
 		"thumbnail": "Sin imagen",
 		"code": "MAT123",
 		"stock": 22
-	},
-	{
-		"id": 4,
-		"title": "Yerba mate",
-		"price": "1800",
-		"thumbnail": "Sin imagen",
-		"code": "MAT123",
-		"stock": 22
-	},
-	{
-		"title": "Bombilla para el mate",
-		"price": "10800",
-		"thumbnail": "Sin imagen",
-		"code": "BOM123",
-		"stock": 22,
-		"id": 16
-	},
-	{
-		"title": "Bombilla para el mate",
-		"price": "10800",
-		"thumbnail": "Sin imagen",
-		"code": "BOM123",
-		"stock": 22,
-		"id": 25
 	},
 	{
 		"id": 2,
-		"title": "Yerba mate Bartolo",
-		"price": "250000",
-		"code": "MAT123",
-		"stock": 14
-	},
-	{
-		"title": "AAASDASDASDASd",
-		"price": "555",
+		"title": "Azucar",
+		"price": "800",
 		"thumbnail": "Sin imagen",
-		"code": "AAAAAAAAAAAAAAAAAAAAAAAAA",
-		"stock": 22,
-		"id": 49
+		"code": "AZU123",
+		"stock": 46
 	},
 	{
-		"id": 36,
-		"title": "TECLADO",
+		"id": 3,
+		"title": "Bombilla para el mate",
+		"price": "10800",
+		"thumbnail": "Sin imagen",
+		"code": "BOM123",
+		"stock": 4
+	},
+	{
+		"id": 4,
+		"title": "Polenta",
+		"price": "10800",
+		"thumbnail": "Sin imagen",
+		"code": "POL123",
+		"stock": 33
+	},
+	{
+		"id": 5,
+		"title": "Micro Ondas",
+		"thumbnail": "Sin imagen",
+		"price": "320000",
+		"code": "MIC123",
+		"stock": 2
+	},
+	{
+		"id": 6,
+		"title": "Iphone 15 pro max",
+		"price": "5000000",
+		"thumbnail": "Sin imagen",
+		"code": "IPH564",
+		"stock": 3
+	},
+	{
+		"id": 7,
+		"title": "Teclado",
 		"price": "98000",
+		"thumbnail": "Sin imagen",
 		"code": "TECLADO234",
 		"stock": 14
+	},
+	{
+		"id": 8,
+		"title": "Monitor 27 pulgadas",
+		"price": "240000",
+		"thumbnail": "Sin imagen",
+		"code": "MON234",
+		"stock": 7
+	},
+	{
+		"id": 9,
+		"title": "Mouse",
+		"price": "17000",
+		"thumbnail": "Sin imagen",
+		"code": "MOO234",
+		"stock": 41
+	},
+	{
+		"id": 10,
+		"title": "Pendrive",
+		"price": "22000",
+		"thumbnail": "Sin imagen",
+		"code": "PEN234",
+		"stock": 52
 	}
 ]

@@ -1,16 +1,15 @@
 const fs = require("fs");  
 const express = require('express');
 
-const port = 7070;
+const port = 8080;
 const app = express();
 
 app.listen(port, () => {
     console.log(`App listen on port ${port}`);
 })
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 
 class ProductManager {
@@ -162,19 +161,58 @@ const product1 = {
 
 const executeCode1 =  () => {
     const productManager = new ProductManager("./src/products/products.json");
-    productManager.addProduct(product1);
+    
+    const allProducts = productManager.getProducts();
 
-    productManager.deleteProduct(1);
+    app.get('/product', async (req, res) => {
+        // http://localhost:8080/product
+        if (!allProducts) {
+            res.status(500).json({
+                status: 500,
+                message: `Internal Server Error`,
+            });
+            return;
+        }
 
-    productManager.updateProduct({
-        "id": 36,
-		"title": "TECLADO",
-		"price": "98000",
-		"code": "TECLADO234",
-		"stock": 14
-	});
+        return res.status(200).json(allProducts);
+    });
 
+    app.get(`/products`, async (req, res) => {
+        // http://localhost:8080/products?limit=5
+        const { limit } = req.query;
+
+        if (limit < 0 || allProducts.length < limit) {
+            res.status(400).json({
+                status: 400,
+                message: `The product number ${limit} doesnt exist!`,
+            });
+            return;
+        }
+            
+        const productByQuantity = allProducts.slice(0, limit);
+
+        return res.status(200).json(productByQuantity);
+    });
+
+    app.get(`/products/:productId`, (req, res) => {
+        // http://localhost:8080/products/2
+        const { productId } = req.params;
+
+        const product = allProducts.find((p) => p.id === parseInt(productId));
+
+        if (!product) {
+            res.status(400).json({
+                status: 400,
+                message: `The product with ${productId} doesnt exist!`,
+            });
+            return;
+        }
+
+        return res.status(200).json(product);
+    });
 
 };
 
-// executeCode1();
+executeCode1();
+
+
