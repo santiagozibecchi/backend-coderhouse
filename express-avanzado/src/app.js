@@ -142,10 +142,10 @@ const getAllProductsInFileSystem = (path) => {
 };
 
 const product1 = {
-    title: "Bombilla para el mate",
-    price: "10800",
+    title: "AAASDASDASDASd",
+    price: "555",
     thumbnail: "Sin imagen",
-    code: "BOM123",
+    code: "AAAAAAAAAAAAAAAAAAAAAAAAA",
     stock: 22,
 };
 
@@ -154,28 +154,17 @@ const executeCode1 =  () => {
     const productManager = new ProductManager("./src/products/products.json");
     productManager.addProduct(product1);
 
-
-
-
-
-};
-
-const executeCode2 =  () => {
-    const productManager = new ProductManager("./src/products/products.json");
     productManager.deleteProduct(1);
-};
 
-const executeCode3 =  () => {
-    const productManager = new ProductManager("./src/products/products.json");  
     productManager.updateProduct({
         "id": 36,
-		"title": "Yerba mate Bartolo",
-		"price": "250000",
-		"code": "MAT123",
+		"title": "TECLADO",
+		"price": "98000",
+		"code": "TECLADO234",
 		"stock": 14
 	});
+
+
 };
 
-// executeCode1();
-// executeCode2();
-// executeCode3();
+executeCode1();
