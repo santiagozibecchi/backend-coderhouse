@@ -167,11 +167,11 @@ const executeCode1 =  () => {
     app.get('/product', async (req, res) => {
         // http://localhost:8080/product
         if (!allProducts) {
-            res.status(500).json({
+            return res.status(500).json({
                 status: 500,
                 message: `Internal Server Error`,
             });
-            return;
+            ;
         }
 
         return res.status(200).json(allProducts);
@@ -182,11 +182,11 @@ const executeCode1 =  () => {
         const { limit } = req.query;
 
         if (limit < 0 || allProducts.length < limit) {
-            res.status(400).json({
+            return res.status(400).json({
                 status: 400,
                 message: `The product number ${limit} doesnt exist!`,
             });
-            return;
+            ;
         }
             
         const productByQuantity = allProducts.slice(0, limit);
@@ -201,11 +201,11 @@ const executeCode1 =  () => {
         const product = allProducts.find((p) => p.id === parseInt(productId));
 
         if (!product) {
-            res.status(400).json({
+            return res.status(400).json({
                 status: 400,
                 message: `The product with ${productId} doesnt exist!`,
             });
-            return;
+            ;
         }
 
         return res.status(200).json(product);
