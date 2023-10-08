@@ -43,6 +43,9 @@ router.post('/product', async (req, res) => {
         return res.status(400).json({status: "error", message: "Falta completar uno o más campos obligatorios!"})
     };
 
+    // TODO validar que los tipos de datos sean los correctos
+    // TODO validar que los datos lleguen de forma correcta, sino, arreglarlos y recien crearlos
+
 
     const newProduct = {
         id: getUUID(),
@@ -101,7 +104,7 @@ router.get(`/products`, async (req, res) => {
 router.get(`/products/:productId`, (req, res) => {
     const { productId } = req.params;
 
-    const product = allProducts.find((p) => p.id === parseInt(productId));
+    const product = allProducts.find((p) => p.id === productId);
 
     if (!product) {
         return res.status(400).json({
