@@ -55,12 +55,12 @@ export const validateRequireFields = (fields) => {
 export const setTextsCorrectly = (texts) => {
 
     const referenceTextToFormat = Object.entries(texts);
-    const cleanText = {};
+    const allFormattedText = {};
 
     for (const [key, value] of referenceTextToFormat) {
         const firstClean = value.trim().split(" ");
 
-        let scapeText = "";
+        let text = "";
 
         for (let i = 0; i < firstClean.length; i++) {
             const word = firstClean[i];
@@ -68,12 +68,12 @@ export const setTextsCorrectly = (texts) => {
             if (word === "") {
                 continue;
             } else {
-                scapeText += word + " "; 
+                text += word + " "; 
             };
         };
-        cleanText[key] = scapeText.trim();
+        allFormattedText[key] = text.trim();
     };
 
-    return cleanText;
+    return allFormattedText;
 };
 
