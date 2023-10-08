@@ -71,5 +71,15 @@
 		"status": true,
 		"stock": 51,
 		"category": "Frutas"
+	},
+	{
+		"id": "1cab6bee-255a-4923-abf8-e1a5ea64b98c",
+		"title": "Uva",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas"
 	}
 ]
