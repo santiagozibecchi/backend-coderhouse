@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { getUUID } from "../plugins/index.js";
-import { saveToFileSystem, getAllFromFileSystem } from "../utils/index.js";
+import { saveToFileSystem, getAllFromFileSystem, validateRequireFields, validateTypes } from "../utils/index.js";
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { setTextsCorrectly } from "../utils/validations.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,40 +24,51 @@ router.post('/product', async (req, res) => {
         description,
         code,
         price,
-        status,
         stock,
         category,
         thumbnails,
     } = req.body;
 
-    const isValidProduct = () => {
-        const fields = [title, description, code, price, status, stock, category];
-        for (const field of fields) {
-            if (!field) {
-                return false;
-            }; 
-        };
-        return true;
-    };
-
-    if (!isValidProduct()) {
-        return res.status(400).json({status: "error", message: "Falta completar uno o más campos obligatorios!"})
-    };
-
-    // TODO validar que los tipos de datos sean los correctos
-    // TODO validar que los datos lleguen de forma correcta, sino, arreglarlos y recien crearlos
-
-
-    const newProduct = {
-        id: getUUID(),
+    const requireProductFields = {
         title,
         description,
         code,
         price,
-        status,
         stock,
         category,
-        thumbnails,
+    };
+
+    const requestProduct = {
+        ...requireProductFields,
+        thumbnails: thumbnails ? thumbnails : [],
+    }
+
+
+    // Validaciones
+
+    if (!validateRequireFields(requireProductFields)) {
+        return res.status(400).json({status: "error", message: "Falta completar campos obligatorios!"})
+    };
+
+    if (!validateTypes(requestProduct, "product")) {
+        return res.status(400).json({status: "error", message: "Verifique si ingreso los tipos de datos segun lo solicitado"})
+    };
+
+    
+    const { title: formatTitle , description: formatDescription, category: formatCategory } = setTextsCorrectly({ title, description, category });
+
+    // Cracion del producto
+
+    const newProduct = {
+        id: getUUID(),
+        title: formatTitle,
+        description: formatDescription,
+        code,
+        price,
+        status: true,
+        stock,
+        category: formatCategory,
+        thumbnails: thumbnails ? thumbnails : [],
     };
 
     allProducts.push(newProduct);
@@ -65,8 +77,8 @@ router.post('/product', async (req, res) => {
         await saveToFileSystem(productPath, allProducts);
     } catch (error) {
         console.log(error);
+        return res.status(500).json({status: "error", message: "Internal Server Error"})
     };
-
 
     return res.status(201).json({status: "success", payload: newProduct});
 });
