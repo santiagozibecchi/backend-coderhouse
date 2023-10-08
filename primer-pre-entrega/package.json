@@ -1,13 +1,12 @@
 {
   "name": "clases",
   "version": "0.0.1",
-  "description": "Desasfia CoderHouse - EcmaScript ",
-  "main": "app.js",
+  "description": "Primer pre entraga del proyecto final",
+  "type": "module",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "devAlternative": "nodemon srcAlternative/app.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "author": "Santiago Zibecchi",
   "license": "ISC",

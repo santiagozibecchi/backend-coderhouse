@@ -1,1 +1,75 @@
-[]
+[
+	{
+		"id": "43a276de-bca9-4b47-a35d-643493c2822a",
+		"title": "Frutilla",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas"
+	},
+	{
+		"id": "e0d1e4c7-b427-488e-9492-c922c887b1e4",
+		"title": "Banana",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas"
+	},
+	{
+		"id": "efc66548-ec18-4d02-842c-1a841a24797a",
+		"title": "Kiwi",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas"
+	},
+	{
+		"id": "b078c6ac-410f-4631-a97b-fbbd7041924d",
+		"title": "Kiwi",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas"
+	},
+	{
+		"id": "cd1ac99a-383c-4540-931a-e23d46fdeec9",
+		"title": "Kiwi",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas"
+	},
+	{
+		"id": "15a3bc0c-a600-4bc8-aabb-fe6ba0d1f570",
+		"title": "Kiwi",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas",
+		"thumbnails": [
+			"pagina web"
+		]
+	},
+	{
+		"id": "02e596be-8428-4351-a17a-d0d75b68ddba",
+		"title": "Uva",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas"
+	}
+]
