@@ -129,10 +129,73 @@ router.get(`/products/:productId`, (req, res) => {
     return res.status(200).json(product);
 });
 
-// TODO PUT
+// DELETE
+router.delete(`/products/:productId`, async (req, res) => {
 
+    const { productId } = req.params;
 
-// TODO DELETE
+    const product = allProducts.find((p) => p.id === productId);
+    
+    if (!product) {
+        return res.status(400).json({
+            status: 400,
+            message: `The product with ${productId} doesnt exist!`,
+        });
+        ;
+    };
+
+    const products = allProducts.filter((p) => p.id !== productId);
+
+    await saveToFileSystem(productPath, products);
+
+    return res.status(200).json(products);
+});
+
+// UPDATE
+router.put(`/products/:productId`, async (req, res) => {
+
+    const { productId } = req.params;
+
+    const product = allProducts.find((p) => p.id === productId);
+
+    if (!product) {
+        return res.status(400).json({
+            status: 400,
+            message: `The product with ${productId} doesnt exist!`,
+        });
+    };
+
+    const {
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnails,
+    } = req.body;
+
+    const updatedProduct = {
+        ...product,
+        title: title ? title : product.title,
+        description: description ? description : product.description,
+        code: code ? code : product.code,
+        price: price ? price : product.price,
+        status: status ? status : product.status,
+        stock: stock ? stock : product.stock,
+        category: category ? category : product.category,
+        thumbnails: thumbnails ? thumbnails : product.thumbnails,
+    };
+
+    const updatedAllProducts = allProducts.filter((p) => p.id !== productId);
+
+    updatedAllProducts.push(updatedProduct);
+
+    await saveToFileSystem(productPath, updatedAllProducts);
+
+    return res.status(200).json(updatedAllProducts);
+});
 
 
 
