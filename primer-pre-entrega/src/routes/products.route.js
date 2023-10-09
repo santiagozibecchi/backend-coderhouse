@@ -194,7 +194,7 @@ router.put(`/products/:productId`, async (req, res) => {
 
     await saveToFileSystem(productPath, updatedAllProducts);
 
-    return res.status(200).json(updatedAllProducts);
+    return res.status(200).json(updatedProduct);
 });
 
 
