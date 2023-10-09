@@ -35,7 +35,7 @@ router.post('/carts', async (req, res) => {
 });
 
 router.post('/carts/:cid/product/:pid', async (req, res) => {
-    
+    // TODO añadir validaciones para que no se puede agregar un producto que no exista
     const cartsInDB = await getAllFromFileSystem(cartPath);
 
     const { cid, pid } = req.params;
@@ -56,9 +56,11 @@ router.post('/carts/:cid/product/:pid', async (req, res) => {
         try {
         
             await saveToFileSystem(cartPath, cartsInDB)
+            return res.status(201).json({ status: "success", payload: cartInDB})
     
         } catch (error) {
             console.log(error);
+            return res.status(400).json({status: "error", message: "Error al guardar"})
         };
 
 
@@ -70,7 +72,20 @@ router.post('/carts/:cid/product/:pid', async (req, res) => {
 
 
 // TODO GET
+router.get('/carts', async (req, res) => {
 
+    const allCarts = await getAllFromFileSystem(cartPath);
+    
+    try {
+        
+        return res.status(200).json({status: "success",payload: allCarts})
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({status: "error", message: "Error al guardar"})
+    };
+
+});
 
 
 
