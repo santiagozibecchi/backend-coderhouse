@@ -16,7 +16,7 @@
 		"description": "Especial para cualquier hora del día",
 		"code": "NAR123",
 		"price": 300,
-		"status": true,
+		"status": false,
 		"stock": 230,
 		"category": "Frutas",
 		"thumbnails": []

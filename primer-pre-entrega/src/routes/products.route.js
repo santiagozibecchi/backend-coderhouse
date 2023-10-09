@@ -176,6 +176,7 @@ router.put(`/products/:productId`, async (req, res) => {
         thumbnails,
     } = req.body;
 
+    // Validaciones
     const updatedProduct = {
         ...product,
         title: title ? title : product.title,
@@ -188,11 +189,19 @@ router.put(`/products/:productId`, async (req, res) => {
         thumbnails: thumbnails ? thumbnails : product.thumbnails,
     };
 
+    if (!validateTypes(updatedProduct, "product")) {
+        return res.status(400).json({status: "error", message: "Verifique si ingreso los tipos de datos segun lo solicitado"})
+    };
+
     const updatedAllProducts = allProducts.filter((p) => p.id !== productId);
 
     updatedAllProducts.push(updatedProduct);
 
-    await saveToFileSystem(productPath, updatedAllProducts);
+    try {
+        await saveToFileSystem(productPath, updatedAllProducts);
+    } catch (error) {
+        console.log(error);
+    };
 
     return res.status(200).json(updatedProduct);
 });
