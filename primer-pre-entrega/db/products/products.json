@@ -20,5 +20,16 @@
 		"stock": 230,
 		"category": "Frutas",
 		"thumbnails": []
+	},
+	{
+		"id": "ed4decea-a48f-4b10-aded-91e9128d3510",
+		"title": "Limon",
+		"description": "Especial para cualquier hora del día",
+		"code": "LIM23423",
+		"price": 300,
+		"status": true,
+		"stock": 120,
+		"category": "Frutas",
+		"thumbnails": []
 	}
 ]

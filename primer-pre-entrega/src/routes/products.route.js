@@ -41,8 +41,8 @@ router.post('/product', async (req, res) => {
     const requestProduct = {
         ...requireProductFields,
         thumbnails: thumbnails ? thumbnails : [],
-    }
-
+        status: true,
+    };
 
     // Validaciones
 
