@@ -1,6 +1,6 @@
 [
 	{
-		"id": "a4d94ae9-e1e2-4b9e-8936-f8dbb074c893",
+		"id": "a4d94ae9",
 		"title": "Uva",
 		"description": "Descripcion del producto",
 		"code": "ASD23423",
@@ -11,7 +11,7 @@
 		"thumbnails": []
 	},
 	{
-		"id": "e65b0efb-f87c-4d69-bd82-ec13c18c3fa0",
+		"id": "e65b0efb",
 		"title": "Banana",
 		"description": "Especial para cualquier hora del día",
 		"code": "NAR123",
@@ -22,7 +22,7 @@
 		"thumbnails": []
 	},
 	{
-		"id": "ed4decea-a48f-4b10-aded-91e9128d3510",
+		"id": "ed4decea",
 		"title": "Limon",
 		"description": "Especial para cualquier hora del día",
 		"code": "LIM23423",
