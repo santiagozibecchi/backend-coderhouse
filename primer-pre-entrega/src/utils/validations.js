@@ -10,6 +10,7 @@ const validateProductTypes = (fields) => {
         stock: typeof fields.stock === "number", 
         category: typeof fields.category === "string", 
         thumbnails: Array.isArray(fields.thumbnails), 
+        status: typeof fields.status === "boolean",
     };
 
     for (const field in productTypes) {
