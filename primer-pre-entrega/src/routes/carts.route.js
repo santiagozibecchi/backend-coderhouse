@@ -14,6 +14,9 @@ const router = Router();
 
 const cartPath = path.join(__dirname, "../../db/carts/carts.json");
 
+
+const productPath = path.join(__dirname, "../../db/products/products.json");
+
 // POST
 router.post('/carts', async (req, res) => {
 
@@ -34,11 +37,34 @@ router.post('/carts', async (req, res) => {
 
 });
 
+const checkProductInDB = async (productId) => {
+    const productInDb = await getAllFromFileSystem(productPath);
+    const product = productInDb.find(prod => prod.id === productId);
+
+    if (!product) {
+        return {
+            status: false,
+            productId,
+        };
+    }
+
+    return {
+        status: true,
+        productId,
+    };
+};
+
 router.post('/carts/:cid/product/:pid', async (req, res) => {
-    // TODO añadir validaciones para que no se puede agregar un producto que no exista
+    
     const cartsInDB = await getAllFromFileSystem(cartPath);
 
     const { cid, pid } = req.params;
+
+    const { status } = await checkProductInDB(pid);
+
+    if (!status){
+        return res.status(400).json({status: "error", message: `El producto - ${pid} - que esta intentando añandir no forma parte del inventario!`})
+    };
     
     const cartInDB = cartsInDB.find(c => c.id === cid);
 
@@ -71,7 +97,6 @@ router.post('/carts/:cid/product/:pid', async (req, res) => {
 });
 
 
-// TODO GET
 router.get('/carts', async (req, res) => {
 
     const allCarts = await getAllFromFileSystem(cartPath);
@@ -87,6 +112,27 @@ router.get('/carts', async (req, res) => {
 
 });
 
+router.get('/carts/:cid/product/:pid', async (req, res) => {
+
+    const { cid, pid } = req.params;
+
+    const cartsInDB = await getAllFromFileSystem(cartPath);
+    const productInDB = await getAllFromFileSystem(productPath);
+
+    let productInfo = {};
+    cartsInDB.find( cart => cart.id === cid).products.forEach( (prod) => {
+
+        if (prod.productId === pid) {
+            productInfo = productInDB.find(p => p.id === pid);
+        };
+    });
+
+    if (Object.keys(productInfo).length === 0) {
+        return res.status(400).json({status: "error", message: "El producto que esta buscando no se encuentra en el carrito seleccionado"})
+    }
+    
+    return res.status(200).json({status: "success", payload: productInfo})
+});
 
 
 
