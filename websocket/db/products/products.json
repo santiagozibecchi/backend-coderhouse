@@ -1,0 +1,35 @@
+[
+	{
+		"id": "a4d94ae9",
+		"title": "Uva",
+		"description": "Descripcion del producto",
+		"code": "ASD23423",
+		"price": 4584,
+		"status": true,
+		"stock": 51,
+		"category": "Frutas",
+		"thumbnails": []
+	},
+	{
+		"id": "e65b0efb",
+		"title": "Banana",
+		"description": "Especial para cualquier hora del día",
+		"code": "NAR123",
+		"price": 300,
+		"status": false,
+		"stock": 230,
+		"category": "Frutas",
+		"thumbnails": []
+	},
+	{
+		"id": "ed4decea",
+		"title": "Limon",
+		"description": "Especial para cualquier hora del día",
+		"code": "LIM23423",
+		"price": 300,
+		"status": true,
+		"stock": 120,
+		"category": "Frutas",
+		"thumbnails": []
+	}
+]
