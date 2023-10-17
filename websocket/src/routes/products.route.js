@@ -1,211 +1,171 @@
 import { Router } from "express";
-import { getUUID } from "../plugins/index.js";
-import { saveToFileSystem, getAllFromFileSystem, validateRequireFields, validateTypes } from "../utils/index.js";
+import {
+  saveToFileSystem,
+  getAllFromFileSystem,
+  validateTypes,
+} from "../utils/index.js";
 
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { setTextsCorrectly } from "../utils/validations.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import { ProductManger } from "../controllers/productManager.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = Router();
 
-
 const productPath = path.join(__dirname, "../../db/products/products.json");
 const allProducts = await getAllFromFileSystem(productPath);
 
-
 // POST
-router.post('/product', async (req, res) => {
+router.post("/product", async (req, res) => {
+  const { title, description, code, price, stock, category, thumbnails } =
+    req.body;
 
-    const {
-        title,
-        description,
-        code,
-        price,
-        stock,
-        category,
-        thumbnails,
-    } = req.body;
+  const Product = new ProductManger(productPath);
 
-    const requireProductFields = {
-        title,
-        description,
-        code,
-        price,
-        stock,
-        category,
-    };
-
-    const requestProduct = {
-        ...requireProductFields,
-        thumbnails: thumbnails ? thumbnails : [],
-        status: true,
-    };
-
-    // Validaciones
-
-    if (!validateRequireFields(requireProductFields)) {
-        return res.status(400).json({status: "error", message: "Falta completar campos obligatorios!"})
-    };
-
-    if (!validateTypes(requestProduct, "product")) {
-        return res.status(400).json({status: "error", message: "Verifique si ingreso los tipos de datos segun lo solicitado"})
-    };
-
-    
-    const { title: formatTitle , description: formatDescription, category: formatCategory } = setTextsCorrectly({ title, description, category });
-
-    // Cracion del producto
-
-    const newProduct = {
-        id: getUUID(),
-        title: formatTitle,
-        description: formatDescription,
-        code,
-        price,
-        status: true,
-        stock,
-        category: formatCategory,
-        thumbnails: thumbnails ? thumbnails : [],
-    };
+  try {
+    const newProduct = await Product.createNewProduct({
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+      thumbnails,
+    });
 
     allProducts.push(newProduct);
+    await saveToFileSystem(productPath, allProducts);
 
-    try {
-        await saveToFileSystem(productPath, allProducts);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({status: "error", message: "Internal Server Error"})
-    };
+    res.status(201).json({ status: "success", payload: newProduct });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: "error", message: "Internal Server Error" });
+  }
 
-    return res.status(201).json({status: "success", payload: newProduct});
+  return res.status(201).json({ status: "success", payload: newProduct });
 });
 
-
-
 // GET
-router.get('/product', async (req, res) => {
+router.get("/product", async (req, res) => {
+  if (!allProducts) {
+    return res.status(500).json({
+      status: 500,
+      message: `Internal Server Error`,
+    });
+  }
 
-    if (!allProducts) {
-        return res.status(500).json({
-            status: 500,
-            message: `Internal Server Error`,
-        });
-    };
-
-    return res.status(200).json(allProducts);
+  return res.status(200).json(allProducts);
 });
 
 router.get(`/products`, async (req, res) => {
-    const { limit } = req.query;
+  const { limit } = req.query;
 
-    if (limit < 0 || allProducts.length < limit) {
-        return res.status(400).json({
-            status: 400,
-            message: `The product number ${limit} doesnt exist!`,
-        });
-    };
-        
-    const productByQuantity = allProducts.slice(0, limit);
+  if (limit < 0 || allProducts.length < limit) {
+    return res.status(400).json({
+      status: 400,
+      message: `The product number ${limit} doesnt exist!`,
+    });
+  }
 
-    return res.status(200).json(productByQuantity);
+  const productByQuantity = allProducts.slice(0, limit);
+
+  return res.status(200).json(productByQuantity);
 });
 
 router.get(`/products/:productId`, (req, res) => {
-    const { productId } = req.params;
+  const { productId } = req.params;
 
-    const product = allProducts.find((p) => p.id === productId);
+  const product = allProducts.find((p) => p.id === productId);
 
-    if (!product) {
-        return res.status(400).json({
-            status: 400,
-            message: `The product with ${productId} doesnt exist!`,
-        });
-        ;
-    };
+  if (!product) {
+    return res.status(400).json({
+      status: 400,
+      message: `The product with ${productId} doesnt exist!`,
+    });
+  }
 
-    return res.status(200).json(product);
+  return res.status(200).json(product);
 });
 
 // DELETE
 router.delete(`/products/:productId`, async (req, res) => {
+  const { productId } = req.params;
 
-    const { productId } = req.params;
+  const product = allProducts.find((p) => p.id === productId);
 
-    const product = allProducts.find((p) => p.id === productId);
-    
-    if (!product) {
-        return res.status(400).json({
-            status: 400,
-            message: `The product with ${productId} doesnt exist!`,
-        });
-        ;
-    };
+  if (!product) {
+    return res.status(400).json({
+      status: 400,
+      message: `The product with ${productId} doesnt exist!`,
+    });
+  }
 
-    const products = allProducts.filter((p) => p.id !== productId);
+  const products = allProducts.filter((p) => p.id !== productId);
 
-    await saveToFileSystem(productPath, products);
+  await saveToFileSystem(productPath, products);
 
-    return res.status(200).json(products);
+  return res.status(200).json(products);
 });
 
 // UPDATE
 router.put(`/products/:productId`, async (req, res) => {
+  const { productId } = req.params;
 
-    const { productId } = req.params;
+  const product = allProducts.find((p) => p.id === productId);
 
-    const product = allProducts.find((p) => p.id === productId);
+  if (!product) {
+    return res.status(400).json({
+      status: 400,
+      message: `The product with ${productId} doesnt exist!`,
+    });
+  }
 
-    if (!product) {
-        return res.status(400).json({
-            status: 400,
-            message: `The product with ${productId} doesnt exist!`,
-        });
-    };
+  const {
+    title,
+    description,
+    code,
+    price,
+    status,
+    stock,
+    category,
+    thumbnails,
+  } = req.body;
 
-    const {
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails,
-    } = req.body;
+  // Validaciones
+  const updatedProduct = {
+    ...product,
+    title: title ? title : product.title,
+    description: description ? description : product.description,
+    code: code ? code : product.code,
+    price: price ? price : product.price,
+    status: status ? status : product.status,
+    stock: stock ? stock : product.stock,
+    category: category ? category : product.category,
+    thumbnails: thumbnails ? thumbnails : product.thumbnails,
+  };
 
-    // Validaciones
-    const updatedProduct = {
-        ...product,
-        title: title ? title : product.title,
-        description: description ? description : product.description,
-        code: code ? code : product.code,
-        price: price ? price : product.price,
-        status: status ? status : product.status,
-        stock: stock ? stock : product.stock,
-        category: category ? category : product.category,
-        thumbnails: thumbnails ? thumbnails : product.thumbnails,
-    };
+  if (!validateTypes(updatedProduct, "product")) {
+    return res.status(400).json({
+      status: "error",
+      message: "Verifique si ingreso los tipos de datos segun lo solicitado",
+    });
+  }
 
-    if (!validateTypes(updatedProduct, "product")) {
-        return res.status(400).json({status: "error", message: "Verifique si ingreso los tipos de datos segun lo solicitado"})
-    };
+  const updatedAllProducts = allProducts.filter((p) => p.id !== productId);
 
-    const updatedAllProducts = allProducts.filter((p) => p.id !== productId);
+  updatedAllProducts.push(updatedProduct);
 
-    updatedAllProducts.push(updatedProduct);
+  try {
+    await saveToFileSystem(productPath, updatedAllProducts);
+  } catch (error) {
+    console.log(error);
+  }
 
-    try {
-        await saveToFileSystem(productPath, updatedAllProducts);
-    } catch (error) {
-        console.log(error);
-    };
-
-    return res.status(200).json(updatedProduct);
+  return res.status(200).json(updatedProduct);
 });
-
-
 
 export default router;

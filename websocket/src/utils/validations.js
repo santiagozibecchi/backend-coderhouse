@@ -1,80 +1,71 @@
-
-
 const validateProductTypes = (fields) => {
+  const productTypes = {
+    title: typeof fields.title === "string",
+    description: typeof fields.description === "string",
+    code: typeof fields.code === "string",
+    price: typeof fields.price === "number",
+    stock: typeof fields.stock === "number",
+    category: typeof fields.category === "string",
+    thumbnails: Array.isArray(fields.thumbnails),
+    status: typeof fields.status === "boolean",
+  };
 
-    const productTypes = {
-        title: typeof fields.title === "string",
-        description: typeof fields.description === "string", 
-        code: typeof fields.code === "string", 
-        price: typeof fields.price === "number", 
-        stock: typeof fields.stock === "number", 
-        category: typeof fields.category === "string", 
-        thumbnails: Array.isArray(fields.thumbnails), 
-        status: typeof fields.status === "boolean",
-    };
+  for (const field in productTypes) {
+    if (!productTypes[field]) {
+      return false;
+    }
+  }
 
-    for (const field in productTypes) {
-        if (!productTypes[field]){
-            return false;
-        };
-    };
-
-    return true;
+  return true;
 };
 
-const validateCartTypes = () => {
-
-};
+const validateCartTypes = () => {};
 
 export const validateTypes = (fields, type) => {
+  const Product = "product";
+  const Cart = "cart";
 
-    const Product = "product";
-    const Cart = "cart";
+  const validateMap = {
+    [Product]: validateProductTypes(fields),
+    [Cart]: validateCartTypes(fields),
+  };
 
-    const validateMap = {
-        [Product]: validateProductTypes(fields),
-        [Cart]: validateCartTypes(fields),
-    }
-
-    return validateMap[type];
+  return validateMap[type];
 };
 
 // fields => type object
 export const validateRequireFields = (fields) => {
-        
-    const fieldsToValidate = Object.keys(fields);
+  const fieldsToValidate = Object.keys(fields);
 
-    for (const field of fieldsToValidate) {
-        if (!field) {
-            return false;
-        }; 
-    };
+  for (const field of fieldsToValidate) {
+    if (!field) {
+      return false;
+    }
+  }
 
-    return true;
+  return true;
 };
 
 export const setTextsCorrectly = (texts) => {
+  const referenceTextToFormat = Object.entries(texts);
+  const allFormattedText = {};
 
-    const referenceTextToFormat = Object.entries(texts);
-    const allFormattedText = {};
+  for (const [key, value] of referenceTextToFormat) {
+    const firstClean = value.trim().split(" ");
 
-    for (const [key, value] of referenceTextToFormat) {
-        const firstClean = value.trim().split(" ");
+    let text = "";
 
-        let text = "";
+    for (let i = 0; i < firstClean.length; i++) {
+      const word = firstClean[i];
 
-        for (let i = 0; i < firstClean.length; i++) {
-            const word = firstClean[i];
+      if (word === "") {
+        continue;
+      } else {
+        text += word + " ";
+      }
+    }
+    allFormattedText[key] = text.trim();
+  }
 
-            if (word === "") {
-                continue;
-            } else {
-                text += word + " "; 
-            };
-        };
-        allFormattedText[key] = text.trim();
-    };
-
-    return allFormattedText;
+  return allFormattedText;
 };
-
