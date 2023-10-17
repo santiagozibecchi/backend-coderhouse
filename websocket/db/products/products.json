@@ -22,13 +22,24 @@
 		"thumbnails": []
 	},
 	{
-		"id": "ed4decea",
-		"title": "Limon",
-		"description": "Especial para cualquier hora del día",
-		"code": "LIM23423",
-		"price": 300,
+		"id": "f4e190a1",
+		"title": "Pera",
+		"description": "Ideal para despues de comer",
+		"code": "PER123",
+		"price": 599,
 		"status": true,
-		"stock": 120,
+		"stock": 22,
+		"category": "Frutas",
+		"thumbnails": []
+	},
+	{
+		"id": "92304530",
+		"title": "Manzana",
+		"description": "Ideal para desayuno",
+		"code": "MANZANA123",
+		"price": 899,
+		"status": true,
+		"stock": 324,
 		"category": "Frutas",
 		"thumbnails": []
 	}

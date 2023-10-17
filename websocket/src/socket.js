@@ -33,6 +33,8 @@ export const init = (httpServer) => {
     // tengo que escuchar el evento, recibo el nuevo prod creado,
     // lo guardo y dentro de este emito los productos que acabo de guardar
     socketClient.on("addProduct", async (product) => {
+      const allProducts = await getAllFromFileSystem(productPath);
+
       // funcion para crear el producto!
       const Product = new ProductManger(productPath);
       const newProduct = await Product.createNewProduct(product);
@@ -42,6 +44,14 @@ export const init = (httpServer) => {
       // luego obtengo nuevamente todos los productos y lo emito
       const products = await getAllFromFileSystem(productPath);
       io.emit("all-products", products);
+    });
+
+    socketClient.on("delete-product", async (productId) => {
+      const allProducts = await getAllFromFileSystem(productPath);
+
+      const products = allProducts.filter((p) => p.id !== productId);
+
+      await saveToFileSystem(productPath, products);
     });
   });
 
