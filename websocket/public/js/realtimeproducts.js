@@ -28,11 +28,12 @@
     const newProduct = {
       title: document.getElementById("title").value,
       description: document.getElementById("description").value,
-      price: document.getElementById("price").value,
+      price: Number(document.getElementById("price").value),
       category: document.getElementById("category").value,
       code: document.getElementById("code").value,
-      stock: document.getElementById("stock").value,
+      stock: Number(document.getElementById("stock").value),
     };
+    console.log(newProduct);
 
     socket.emit("addProduct", newProduct);
   });

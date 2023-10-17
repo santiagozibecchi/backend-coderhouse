@@ -6,6 +6,7 @@ import {
 
 import path from "path";
 import { fileURLToPath } from "url";
+import { ProductManger } from "./controllers/productManager.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,21 +25,22 @@ export const init = (httpServer) => {
   io.on("connection", async (socketClient) => {
     console.log(`Client ID: ${socketClient.id} conectado`);
 
-    const products = await getAllFromFileSystem(productPath);
+    const allProducts = await getAllFromFileSystem(productPath);
 
     // emito todos los productos!
-    socketClient.emit("all-products", products);
+    socketClient.emit("all-products", allProducts);
 
     // tengo que escuchar el evento, recibo el nuevo prod creado,
     // lo guardo y dentro de este emito los productos que acabo de guardar
-    socketClient.on("addProduct", async (newProduct) => {
+    socketClient.on("addProduct", async (product) => {
       // funcion para crear el producto!
-      products.push(newProduct);
+      const Product = new ProductManger(productPath);
+      const newProduct = await Product.createNewProduct(product);
+      allProducts.push(newProduct);
+      await saveToFileSystem(productPath, allProducts);
 
       // luego obtengo nuevamente todos los productos y lo emito
-
-      saveToFileSystem(productPath, products);
-
+      const products = await getAllFromFileSystem(productPath);
       io.emit("all-products", products);
     });
   });
