@@ -1,5 +1,8 @@
 import { Server } from "socket.io";
-import { getAllFromFileSystem } from "./utils/file-system-management.js";
+import {
+  getAllFromFileSystem,
+  saveToFileSystem,
+} from "./utils/file-system-management.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -33,6 +36,8 @@ export const init = (httpServer) => {
       products.push(newProduct);
 
       // luego obtengo nuevamente todos los productos y lo emito
+
+      saveToFileSystem(productPath, products);
 
       io.emit("all-products", products);
     });

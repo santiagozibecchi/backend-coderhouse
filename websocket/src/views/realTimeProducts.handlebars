@@ -1,16 +1,18 @@
 <html>
   <head>
     <style>
-      h1 { color: #333; } /* Estilos para los títulos h3 */ h3 { color: #555; }
-      /* Estilos para los formularios */ form { background-color: #fff; padding:
-      20px; border: 1px solid #ddd; margin-top: 10px; } /* Estilos para las
-      etiquetas y los campos de entrada */ label { font-weight: bold; }
-      input[type="text"] { width: 100%; padding: 5px; margin: 5px 0; } /*
-      Estilos para el botón de guardar */ input[type="submit"] {
+      body { background-color: #c3c3c3;} h1 { color: #333; } /* Estilos para los
+      títulos h3 */ h3 { color: #555; } /* Estilos para los formularios */ form
+      { background-color: #ffffffa2; padding: 20px; border: 1px solid #ddd;
+      margin-top: 10px; } /* Estilos para las etiquetas y los campos de entrada
+      */ label { font-weight: bold; } input { width: 100%; padding: 5px; margin:
+      5px 0; } /* Estilos para el botón de guardar */ input[type="submit"] {
       background-color: #007bff; color: #fff; padding: 10px 20px; border: none;
       cursor: pointer; } /* Estilos para la sección de productos */ #products {
       margin-top: 20px; background-color: #fff; border: 1px solid #ddd; padding:
-      20px; }
+      20px; } #products { display: grid; grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px; grid-auto-rows: minmax(100px, auto); } #products > div
+      {border: 2px solid #333; padding: 15px; border-radius: 15px;}
     </style>
   </head>
   <body>
@@ -22,27 +24,27 @@
         <form id="form-product" method="post">
           <div>
             <label for="title">Titulo</label>
-            <input type="text" name="title" id="title" />
+            <input type="text" name="title" id="title" required />
           </div>
           <div>
             <label for="description">Descripción</label>
-            <input type="text" name="description" id="description" />
+            <input type="text" name="description" id="description" required />
           </div>
           <div>
             <label for="price">Precio</label>
-            <input type="number" name="price" id="price" />
+            <input type="number" name="price" id="price" required />
           </div>
           <div>
             <label for="category">Categoría</label>
-            <input type="text" name="category" id="category" />
+            <input type="text" name="category" id="category" required />
           </div>
           <div>
             <label for="code">Código</label>
-            <input type="text" name="code" id="code" />
+            <input type="text" name="code" id="code" required />
           </div>
           <div>
             <label for="stock">Stock</label>
-            <input type="number" name="stock" id="stock" />
+            <input type="number" name="stock" id="stock" required />
           </div>
 
           <input type="submit" value="Guardar" />

@@ -9,7 +9,11 @@
     allProducts.forEach((product) => {
       const productElement = document.createElement("div");
       productElement.innerHTML = `
-        <h3>${product.title}</h3>
+        <h3>Producto: ${product.title}</h3>
+        <div>Descripción: ${product.description}</div>
+        <div>Precio: $${product.price}</div>
+        <div>En Stock: ${product.stock}</div>
+        <div>Categoría: ${product.category}</div>
       `;
       divProducts.appendChild(productElement);
     });
